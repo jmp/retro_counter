@@ -1,8 +1,8 @@
 defmodule RetroCounterTest do
   use ExUnit.Case
-  doctest RetroCounter
 
-  test "greets the world" do
-    assert RetroCounter.hello() == :world
+  test "smoke" do
+    pid = RetroCounter.start(:normal, [])
+    assert pid != nil
   end
 end

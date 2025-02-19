@@ -1,18 +1,10 @@
 defmodule RetroCounter do
-  @moduledoc """
-  Documentation for `RetroCounter`.
-  """
+  use Application
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    children = []
 
-  ## Examples
-
-      iex> RetroCounter.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    opts = [strategy: :one_for_one, name: RetroCounter.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
