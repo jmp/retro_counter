@@ -19,6 +19,9 @@ defmodule RetroCounter.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:bandit, "~> 1.6"},
+      {:req, "~> 0.5.0", only: :test}
+    ]
   end
 end

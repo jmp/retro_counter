@@ -2,7 +2,7 @@ defmodule RetroCounter do
   use Application
 
   def start(_type, _args) do
-    children = []
+    children = [{Bandit, plug: RetroCounter.Router}]
 
     opts = [strategy: :one_for_one, name: RetroCounter.Supervisor]
     Supervisor.start_link(children, opts)
