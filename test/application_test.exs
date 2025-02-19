@@ -2,10 +2,10 @@ defmodule RetroCounter.ApplicationTest do
   use ExUnit.Case
 
   test "renders counter image" do
-    response = Req.get!("http://localhost:4000/count.svg")
+    response = get("http://localhost:4000/count.svg")
 
     assert response.status == 200
-    assert response.headers["content-type"] == ["image/svg+xml; charset=utf-8"]
+    assert response.headers["content-type"] == "image/svg+xml; charset=utf-8"
 
     assert response.body ==
              """
@@ -16,5 +16,18 @@ defmodule RetroCounter.ApplicationTest do
                </text>
              </svg>
              """
+  end
+
+  defp get(url) do
+    {:ok, {{_, status, _}, header_list, body_chars}} = :httpc.request(url)
+
+    headers = Map.new(header_list, fn {k, v} -> {List.to_string(k), List.to_string(v)} end)
+    body = List.to_string(body_chars)
+
+    %{
+      :status => status,
+      :headers => headers,
+      :body => body
+    }
   end
 end

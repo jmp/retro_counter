@@ -13,15 +13,14 @@ defmodule RetroCounter.MixProject do
 
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :inets],
       mod: {RetroCounter, []}
     ]
   end
 
   defp deps do
     [
-      {:bandit, "~> 1.6"},
-      {:req, "~> 0.5.0", only: :test}
+      {:bandit, "~> 1.6"}
     ]
   end
 end
