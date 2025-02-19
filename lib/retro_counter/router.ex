@@ -6,6 +6,7 @@ defmodule RetroCounter.Router do
 
   get "/count.svg" do
     conn
+    |> put_resp_content_type("image/svg+xml")
     |> send_resp(
       200,
       """

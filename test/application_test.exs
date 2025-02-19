@@ -5,6 +5,7 @@ defmodule RetroCounter.ApplicationTest do
     response = Req.get!("http://localhost:4000/count.svg")
 
     assert response.status == 200
+    assert response.headers["content-type"] == ["image/svg+xml; charset=utf-8"]
 
     assert response.body ==
              """
