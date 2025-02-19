@@ -10,4 +10,4 @@ First, install the dependencies:
 
 Then run:
 
-    mix run
+    mix run --no-halt
