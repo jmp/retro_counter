@@ -1,4 +1,4 @@
-defmodule RetroCounter.ApplicationTest do
+defmodule RetroCounter.Test do
   use ExUnit.Case
 
   test "renders counter image" do
