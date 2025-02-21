@@ -4,12 +4,13 @@ defmodule RetroCounter.CountServerTest do
 
   test "writes count to disk at scheduled intervals" do
     pid = self()
-    CountServer.start_link("count.txt", :test, 0, fn -> send(pid, :write_count) end)
+    path = Briefly.create!()
+    CountServer.start_link(path, :test, 0, fn -> send(pid, :write_count) end)
 
     wait_for_message(:write_count)
     wait_for_message(:write_count)
 
-    count = read_integer("count.txt")
+    count = read_integer(path)
     assert count == 0
   end
 
