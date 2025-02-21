@@ -4,7 +4,7 @@ defmodule RetroCounter.CountServerTest do
 
   test "writes count to disk at scheduled intervals" do
     pid = self()
-    CountServer.start_link(0, :test, 0, fn -> send(pid, :write_count) end)
+    CountServer.start_link("count.txt", :test, 0, fn -> send(pid, :write_count) end)
 
     wait_for_message(:write_count)
     wait_for_message(:write_count)

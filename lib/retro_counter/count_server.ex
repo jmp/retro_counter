@@ -2,17 +2,19 @@ defmodule RetroCounter.CountServer do
   use GenServer
 
   def start_link(
-        count,
+        count_path,
         name \\ :count_server,
         write_interval \\ :timer.hours(1),
         write_callback \\ fn -> nil end
       ) do
+    count = RetroCounter.Storage.read_integer(count_path)
     IO.puts("Starting server with count #{count}...")
 
     GenServer.start_link(
       __MODULE__,
       %{
         :count => count,
+        :count_path => count_path,
         :write_interval => write_interval,
         :write_callback => write_callback
       },
@@ -32,7 +34,7 @@ defmodule RetroCounter.CountServer do
   end
 
   def handle_info(:write, state) do
-    RetroCounter.Storage.write_integer(state.count, "count.txt")
+    RetroCounter.Storage.write_integer(state.count, state.count_path)
     state.write_callback.()
     schedule_write(state.write_interval)
     {:noreply, state}
