@@ -10,11 +10,11 @@ defmodule RetroCounter.CountServerTest do
       count_path: path,
       name: :test,
       write_interval: 0,
-      write_callback: fn -> send(pid, :write_count) end
+      write_callback: fn -> send(pid, :write) end
     )
 
-    assert_receive :write_count
-    assert_receive :write_count
+    assert_receive :write
+    assert_receive :write
 
     count = read_integer(path)
     assert count == 0
