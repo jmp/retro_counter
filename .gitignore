@@ -7,3 +7,4 @@ erl_crash.dump
 *.ez
 retro_counter-*.tar
 /tmp/
+count.txt
