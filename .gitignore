@@ -7,4 +7,5 @@ erl_crash.dump
 *.ez
 retro_counter-*.tar
 /tmp/
+.DS_Store
 count.txt
