@@ -5,7 +5,15 @@ defmodule RetroCounter.CountServerTest do
   test "writes count to disk at scheduled intervals" do
     pid = self()
     path = Briefly.create!()
-    CountServer.start_link(path, :test, 0, fn -> send(pid, :write_count) end)
+
+    start_opts = [
+      count_path: path,
+      name: :test,
+      write_interval: 0,
+      write_callback: fn -> send(pid, :write_count) end
+    ]
+
+    CountServer.start_link(start_opts)
 
     assert_receive :write_count
     assert_receive :write_count
