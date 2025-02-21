@@ -5,7 +5,7 @@ defmodule RetroCounter.CountServer do
         count_path,
         name \\ :count_server,
         write_interval \\ :timer.hours(1),
-        write_callback \\ fn -> nil end
+        write_callback \\ fn -> :ok end
       ) do
     count = RetroCounter.Storage.read_integer(count_path)
     IO.puts("Starting server with count #{count}...")
