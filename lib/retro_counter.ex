@@ -4,7 +4,7 @@ defmodule RetroCounter do
   def start(_type, _args) do
     children = [
       {Bandit, plug: RetroCounter.Router},
-      {RetroCounter.CountServer, 0}
+      {RetroCounter.CountServer, {"count.txt"}}
     ]
 
     opts = [strategy: :one_for_one, name: RetroCounter.Supervisor]
