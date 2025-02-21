@@ -7,9 +7,6 @@ defmodule RetroCounter.Storage do
   end
 
   def write_integer(count, path) do
-    case File.write(path, to_string(count)) do
-      :ok -> count
-      _ -> 0
-    end
+    :ok = File.write(path, to_string(count))
   end
 end
