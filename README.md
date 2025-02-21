@@ -29,7 +29,7 @@ it by one, then write the new count back into the file.
 There is one obvious problem with this approach. The file may get corrupted with
 simultaneous reads and writes.
 
-Then I realized Elixir has super powers. I can use a GenServer to hold the count
+Then I realized Elixir has super powers. I can use a [GenServer][genserver] to hold the count
 in memory all the time. Then, I can schedule a single, separate process whose only
 job is to write the current value to the file at a scheduled interval (e.g. one hour).
 
@@ -39,3 +39,5 @@ ExUnit before.
 
 Anyway, this has been an fun learning experience and maybe it'll be interesting for
 somebody else as well. So, here you go.
+
+[genserver]: https://hexdocs.pm/elixir/GenServer.html
