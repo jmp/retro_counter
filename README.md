@@ -17,6 +17,10 @@ Then run:
 
 Access the counter at http://localhost:4000/count.svg.
 
+## Run tests
+
+    mix test
+
 ## Why
 
 It started as stupid idea. Who has visitor counters on their websites these days?
