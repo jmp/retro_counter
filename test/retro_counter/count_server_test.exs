@@ -7,6 +7,7 @@ defmodule RetroCounter.CountServerTest do
     CountServer.start_link(0, :test, 0, fn -> send(pid, :write_count) end)
 
     wait_for_message(:write_count)
+    wait_for_message(:write_count)
 
     count = read_integer("count.txt")
     assert count == 0
