@@ -6,14 +6,12 @@ defmodule RetroCounter.CountServerTest do
     pid = self()
     path = Briefly.create!()
 
-    start_opts = [
+    CountServer.start_link(
       count_path: path,
       name: :test,
       write_interval: 0,
       write_callback: fn -> send(pid, :write_count) end
-    ]
-
-    CountServer.start_link(start_opts)
+    )
 
     assert_receive :write_count
     assert_receive :write_count
