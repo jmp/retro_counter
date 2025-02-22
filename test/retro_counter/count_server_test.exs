@@ -15,9 +15,7 @@ defmodule RetroCounter.CountServerTest do
 
     assert_receive :write
     assert_receive :write
-
-    count = read_integer(path)
-    assert count == 0
+    assert read_integer(path) == 0
   end
 
   defp read_integer(path) do
