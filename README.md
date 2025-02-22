@@ -34,8 +34,9 @@ There is one obvious problem with this approach. The file may get corrupted with
 simultaneous reads and writes.
 
 Then I realized Elixir has super powers. I can use a [GenServer][genserver] to hold the count
-in memory all the time. Then, I can schedule a single, separate process whose only
-job is to write the current value to the file at a scheduled interval (e.g. one hour).
+in memory all the time. It also means I have a single process at the time writing to the file.
+As an extra bonus, you can defer writing by some delay (e.g. 30 seconds) to make sure we don't
+write to the file on every counter increment.
 
 Maybe this approach also has some downsides, but it was very simple to do in Elixir,
 and relatively easy to test as well. Especially given that I had zero experience with
