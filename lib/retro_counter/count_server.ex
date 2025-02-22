@@ -2,7 +2,7 @@ defmodule RetroCounter.CountServer do
   use GenServer
 
   def start_link(opts) do
-    count_path = Keyword.get(opts, :count_path, "count.txt")
+    count_path = Keyword.fetch!(opts, :count_path)
     name = Keyword.get(opts, :name, :count_server)
     write_interval = Keyword.get(opts, :write_interval, :timer.hours(1))
     write_callback = Keyword.get(opts, :write_callback, fn -> :ok end)
