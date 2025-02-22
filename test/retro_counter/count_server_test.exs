@@ -1,5 +1,5 @@
 defmodule RetroCounter.CountServerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "writes count to disk immediately with zero delay" do
     pid = self()

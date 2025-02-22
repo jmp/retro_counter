@@ -1,5 +1,5 @@
 defmodule RetroCounter.Test do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "counter works" do
     get("/count.svg")
