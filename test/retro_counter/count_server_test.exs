@@ -1,12 +1,11 @@
 defmodule RetroCounter.CountServerTest do
   use ExUnit.Case
-  alias RetroCounter.CountServer
 
   test "writes count to disk at scheduled intervals" do
     pid = self()
     path = Briefly.create!()
 
-    CountServer.start_link(
+    RetroCounter.CountServer.start_link(
       count_path: path,
       name: :test,
       write_interval: 0,
