@@ -2,27 +2,16 @@ defmodule RetroCounter.CountServer do
   use GenServer
 
   def start_link(opts) do
-    count_path = Keyword.fetch!(opts, :count_path)
-    name = Keyword.get(opts, :name, :count_server)
-    write_interval = Keyword.get(opts, :write_interval, :timer.hours(1))
-    write_callback = Keyword.get(opts, :write_callback, fn -> :ok end)
-    count = RetroCounter.Storage.read_integer(count_path)
+    parsed_opts = read_opts(opts)
 
-    GenServer.start_link(
-      __MODULE__,
-      %{
-        :count => count,
-        :count_path => count_path,
-        :write_interval => write_interval,
-        :write_callback => write_callback
-      },
-      name: name
-    )
+    GenServer.start_link(__MODULE__, parsed_opts, name: parsed_opts.name)
   end
 
   def init(state) do
+    count = RetroCounter.Storage.read_integer(state.count_path)
+    new_state = Map.put(state, :count, count)
     schedule_write(state.write_interval)
-    {:ok, state}
+    {:ok, new_state}
   end
 
   def handle_call(:increment, _from, state) do
@@ -40,5 +29,14 @@ defmodule RetroCounter.CountServer do
 
   defp schedule_write(delay) do
     Process.send_after(self(), :write, delay)
+  end
+
+  defp read_opts(opts) do
+    %{
+      :count_path => Keyword.fetch!(opts, :count_path),
+      :write_interval => Keyword.get(opts, :write_interval, :timer.hours(1)),
+      :write_callback => Keyword.get(opts, :write_callback, fn -> :ok end),
+      :name => Keyword.get(opts, :name, :count_server)
+    }
   end
 end
