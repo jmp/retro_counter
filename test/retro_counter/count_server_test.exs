@@ -8,7 +8,7 @@ defmodule RetroCounter.CountServerTest do
     RetroCounter.CountServer.start_link(
       count_path: path,
       name: :test,
-      write_interval: 0,
+      write_delay: 0,
       write_callback: fn -> send(pid, :write) end
     )
 
@@ -25,7 +25,7 @@ defmodule RetroCounter.CountServerTest do
     RetroCounter.CountServer.start_link(
       count_path: path,
       name: :test,
-      write_interval: :timer.seconds(30),
+      write_delay: :timer.seconds(30),
       write_callback: fn -> send(pid, :write) end
     )
 

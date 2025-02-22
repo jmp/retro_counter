@@ -17,7 +17,7 @@ defmodule RetroCounter.CountServer do
     new_count = state.count + 1
 
     if !state.write_scheduled? do
-      Process.send_after(self(), :write, state.write_interval)
+      Process.send_after(self(), :write, state.write_delay)
     end
 
     new_state = %{state | count: new_count, write_scheduled?: true}
@@ -34,7 +34,7 @@ defmodule RetroCounter.CountServer do
   defp read_opts(opts) do
     %{
       :count_path => Keyword.fetch!(opts, :count_path),
-      :write_interval => Keyword.get(opts, :write_interval, :timer.seconds(30)),
+      :write_delay => Keyword.get(opts, :write_delay, :timer.seconds(30)),
       :write_callback => Keyword.get(opts, :write_callback, fn -> :ok end),
       :write_scheduled? => false,
       :name => Keyword.get(opts, :name, :count_server)
