@@ -17,6 +17,16 @@ Then run:
 
 Access the counter at http://localhost:4000/count.svg.
 
+## Configuration
+
+You can configure the server with environment variables:
+
+| Environment variable        | Default value | Description                                      |
+| --------------------------- | ------------- | ------------------------------------------------ |
+| `RETRO_COUNTER_PORT`        | `4000`        | Port for the HTTP server.                        |
+| `RETRO_COUNTER_PATH`        | `count.txt`   | Path to where the current count will be stored.  |
+| `RETRO_COUNTER_WRITE_DELAY` | `30000`       | Number of milliseconds to defer writing to file. |
+
 ## Run tests
 
     mix test
