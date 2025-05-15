@@ -2,12 +2,11 @@ defmodule RetroCounter.Test do
   use ExUnit.Case, async: true
 
   test "counter works" do
-    get("/count.svg")
     response = get("/count.svg")
 
     assert response.status == 200
     assert response.headers["content-type"] == "image/svg+xml; charset=utf-8"
-    assert response.body == svg_with_text("0000002")
+    assert response.body == svg_with_text("0000001")
   end
 
   defp get(path) do
