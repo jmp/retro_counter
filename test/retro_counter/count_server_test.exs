@@ -3,7 +3,7 @@ defmodule RetroCounter.CountServerTest do
 
   test "writes count to disk immediately with zero delay" do
     pid = self()
-    path = Briefly.create!()
+    path = create_temporary_file()
 
     RetroCounter.CountServer.start_link(
       count_path: path,
@@ -20,7 +20,7 @@ defmodule RetroCounter.CountServerTest do
 
   test "defers writing count to disk with nonzero delay" do
     pid = self()
-    path = Briefly.create!()
+    path = create_temporary_file()
 
     RetroCounter.CountServer.start_link(
       count_path: path,
@@ -37,5 +37,9 @@ defmodule RetroCounter.CountServerTest do
 
   defp read_integer(path) do
     String.to_integer(File.read!(path))
+  end
+
+  defp create_temporary_file() do
+    Briefly.create!()
   end
 end
