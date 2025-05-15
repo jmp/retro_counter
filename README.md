@@ -3,11 +3,12 @@
 This is a simple retro-style visitor counter for websites.
 It started as a stupid idea. Who has visitor counters on their websites these days?
 But it seemed like a small enough project to learn Elixir, so I decided, why not?
+
 The original idea was to store the current visitor count in a flat text file.
 When a person visits the site, we would read the count from the file, increment
 it by one, then write the new count back into the file.
 
-There is one obvious problem with this approach. The file may get corrupted with
+There was an obvious problem with this approach. The file may get corrupted with
 simultaneous reads and writes.
 
 Then I realized Elixir has superpowers. I can use a [GenServer][genserver] to hold the count
