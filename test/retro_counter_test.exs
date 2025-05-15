@@ -10,16 +10,13 @@ defmodule RetroCounter.Test do
   end
 
   defp get(path) do
-    url = "http://localhost:4000#{path}"
-    {:ok, {{_, status, _}, header_list, body_chars}} = :httpc.request(url)
-
-    headers = Map.new(header_list, fn {k, v} -> {List.to_string(k), List.to_string(v)} end)
-    body = List.to_string(body_chars)
+    url = String.to_charlist("http://localhost:4000#{path}")
+    {:ok, {{_, status, _}, headers, body}} = :httpc.request(url)
 
     %{
-      :status => status,
-      :headers => headers,
-      :body => body
+      status: status,
+      headers: for({k, v} <- headers, into: %{}, do: {to_string(k), to_string(v)}),
+      body: to_string(body)
     }
   end
 
