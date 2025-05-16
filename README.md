@@ -23,6 +23,34 @@ ExUnit before.
 Anyway, this has been a fun learning experience and maybe it'll be interesting for
 somebody else as well. So, here you go.
 
+## How it works
+
+Here's a rough diagram of how everything works:
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Router
+    participant CountServer
+    participant Storage
+    
+    CountServer->>Storage: Read current count
+    Storage-->>CountServer: Return count
+    
+    Client->>Router: GET /count.svg
+    Router->>CountServer: :increment
+    CountServer->>CountServer: Increment count
+    
+    CountServer->>CountServer: Schedule :write
+    activate CountServer
+    
+    CountServer-->>Router: Response with count
+    Router-->>Client: SVG image with count
+    
+    Note over CountServer: Delay elapses
+    CountServer->>Storage: :write current count
+    deactivate CountServer
+```
+
 ## Requirements
 
 * Elixir (see `mix.exs` for version)
