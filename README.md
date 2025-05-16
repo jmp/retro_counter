@@ -35,20 +35,15 @@ sequenceDiagram
     
     CountServer->>Storage: Read current count
     Storage-->>CountServer: Return count
-    
     Client->>Router: GET /count.svg
     Router->>CountServer: :increment
     CountServer->>CountServer: Increment count
-    
-    CountServer->>CountServer: Schedule :write
-    activate CountServer
-    
+    CountServer->>+CountServer: Schedule :write (delayed)
     CountServer-->>Router: Response with count
     Router-->>Client: SVG image with count
-    
     Note over CountServer: Delay elapses
-    CountServer->>Storage: :write current count
-    deactivate CountServer
+    CountServer->>-CountServer: Receive :write message
+    CountServer->>Storage: Write count
 ```
 
 ## Requirements
