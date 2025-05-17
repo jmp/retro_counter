@@ -1,11 +1,11 @@
-defmodule RetroCounter.CountServerTest do
+defmodule RetroCounter.CounterTest do
   use ExUnit.Case, async: true
 
   test "writes count to disk immediately with zero delay" do
     pid = self()
     path = create_temporary_file()
 
-    RetroCounter.CountServer.start_link(
+    RetroCounter.Counter.start_link(
       count_path: path,
       name: :test,
       write_delay: 0,
@@ -22,7 +22,7 @@ defmodule RetroCounter.CountServerTest do
     pid = self()
     path = create_temporary_file()
 
-    RetroCounter.CountServer.start_link(
+    RetroCounter.Counter.start_link(
       count_path: path,
       name: :test,
       write_delay: :timer.seconds(30),

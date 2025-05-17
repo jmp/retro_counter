@@ -1,4 +1,4 @@
-defmodule RetroCounter.CountServer do
+defmodule RetroCounter.Counter do
   use GenServer
 
   def start_link(opts) do

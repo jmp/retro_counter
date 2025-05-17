@@ -8,7 +8,7 @@ defmodule RetroCounter do
 
     children = [
       {Bandit, plug: RetroCounter.Router, port: port},
-      {RetroCounter.CountServer, [count_path: count_path, write_delay: write_delay]}
+      {RetroCounter.Counter, [count_path: count_path, write_delay: write_delay]}
     ]
 
     opts = [strategy: :one_for_one, name: RetroCounter.Supervisor]
