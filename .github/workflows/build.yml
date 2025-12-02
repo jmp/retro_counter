@@ -3,7 +3,7 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: elixir:1.19.3
+    container: elixir:1.19.4
     steps:
       - uses: actions/checkout@v4
       - run: mix deps.get
