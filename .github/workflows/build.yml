@@ -5,6 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     container: elixir:1.19.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: mix deps.get
       - run: mix test
