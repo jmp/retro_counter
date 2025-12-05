@@ -1,23 +1,17 @@
 defmodule RetroCounter.Test do
   use ExUnit.Case, async: true
+  import Plug.Test
+  import Plug.Conn
+
+  @opts RetroCounter.Router.init([])
 
   test "counter works" do
-    response = get("/count.svg")
+    conn = conn(:get, "/count.svg")
+    conn = RetroCounter.Router.call(conn, @opts)
 
-    assert response.status == 200
-    assert response.headers["content-type"] == "image/svg+xml; charset=utf-8"
-    assert response.body == svg_with_text("0000001")
-  end
-
-  defp get(path) do
-    url = String.to_charlist("http://localhost:4000#{path}")
-    {:ok, {{_, status, _}, headers, body}} = :httpc.request(url)
-
-    %{
-      status: status,
-      headers: for({k, v} <- headers, into: %{}, do: {to_string(k), to_string(v)}),
-      body: to_string(body)
-    }
+    assert conn.status == 200
+    assert get_resp_header(conn, "content-type") == ["image/svg+xml; charset=utf-8"]
+    assert conn.resp_body == svg_with_text("0000001")
   end
 
   defp svg_with_text(text) do
