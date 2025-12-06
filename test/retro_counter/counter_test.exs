@@ -5,9 +5,7 @@ defmodule RetroCounter.CounterTest do
     filename = "retro_counter_test_#{System.unique_integer([:positive, :monotonic])}"
     path = Path.join(System.tmp_dir!(), filename)
 
-    on_exit(fn ->
-      File.rm(path)
-    end)
+    on_exit(fn -> File.rm(path) end)
 
     File.touch!(path)
 
@@ -15,38 +13,48 @@ defmodule RetroCounter.CounterTest do
   end
 
   test "writes count to disk immediately with zero delay", %{path: path} do
-    pid = self()
+    test_pid = self()
 
-    RetroCounter.Counter.start_link(
-      count_path: path,
-      name: :test_immediate,
-      write_delay: 0,
-      write_callback: fn -> send(pid, :write) end
-    )
+    counter_pid =
+      start_supervised!(
+        {RetroCounter.Counter,
+         [
+           count_path: path,
+           write_delay: 0,
+           write_callback: fn -> send(test_pid, :write) end,
+           name: nil
+         ]}
+      )
 
-    count = GenServer.call(:test_immediate, :increment)
+    count = GenServer.call(counter_pid, :increment)
 
     assert_receive :write
-    assert read_integer(path) == count
+    assert read_current_count(path) == count
   end
 
   test "defers writing count to disk with nonzero delay", %{path: path} do
-    pid = self()
+    test_pid = self()
 
-    RetroCounter.Counter.start_link(
-      count_path: path,
-      name: :test_deferred,
-      write_delay: :timer.seconds(30),
-      write_callback: fn -> send(pid, :write) end
-    )
+    counter_pid =
+      start_supervised!(
+        {RetroCounter.Counter,
+         [
+           count_path: path,
+           write_delay: :timer.seconds(30),
+           write_callback: fn -> send(test_pid, :write) end,
+           name: nil
+         ]}
+      )
 
-    GenServer.call(:test_deferred, :increment)
+    GenServer.call(counter_pid, :increment)
 
     refute_receive :write
-    assert_raise(ArgumentError, fn -> read_integer(path) end)
+    assert File.read!(path) == ""
   end
 
-  defp read_integer(path) do
-    String.to_integer(File.read!(path))
+  defp read_current_count(path) do
+    path
+    |> File.read!()
+    |> String.to_integer()
   end
 end
