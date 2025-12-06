@@ -5,7 +5,7 @@ defmodule RetroCounter.Router do
   plug(:dispatch)
 
   get "/count.svg" do
-    count = GenServer.call(:count_server, :increment)
+    count = RetroCounter.Counter.increment()
 
     conn
     |> put_resp_content_type("image/svg+xml")

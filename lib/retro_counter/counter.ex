@@ -1,16 +1,30 @@
 defmodule RetroCounter.Counter do
   use GenServer
 
-  def start_link(opts) do
-    parsed_opts = read_opts(opts)
+  defstruct [:count_path, :write_delay, :write_callback, :count, :write_scheduled?]
 
-    GenServer.start_link(__MODULE__, parsed_opts, name: parsed_opts.name)
+  def start_link(opts) do
+    name = Keyword.get(opts, :name, :count_server)
+
+    GenServer.start_link(__MODULE__, opts, name: name)
   end
 
-  def init(state) do
-    count = RetroCounter.Storage.read_integer(state.count_path)
-    new_state = Map.put(state, :count, count)
-    {:ok, new_state}
+  def increment(server \\ :count_server) do
+    GenServer.call(server, :increment)
+  end
+
+  def init(opts) do
+    state = %__MODULE__{
+      count_path: Keyword.fetch!(opts, :count_path),
+      write_delay: Keyword.get(opts, :write_delay, :timer.seconds(30)),
+      write_callback: Keyword.get(opts, :write_callback, fn -> :ok end),
+      write_scheduled?: false,
+      count: 0
+    }
+
+    initial_count = RetroCounter.Storage.read_integer(state.count_path)
+
+    {:ok, %{state | count: initial_count}}
   end
 
   def handle_call(:increment, _from, state) do
@@ -29,16 +43,6 @@ defmodule RetroCounter.Counter do
     state.write_callback.()
     new_state = %{state | write_scheduled?: false}
     {:noreply, new_state}
-  end
-
-  defp read_opts(opts) do
-    %{
-      :count_path => Keyword.fetch!(opts, :count_path),
-      :write_delay => Keyword.get(opts, :write_delay, :timer.seconds(30)),
-      :write_callback => Keyword.get(opts, :write_callback, fn -> :ok end),
-      :write_scheduled? => false,
-      :name => Keyword.get(opts, :name, :count_server)
-    }
   end
 
   defp write_state(state) do
