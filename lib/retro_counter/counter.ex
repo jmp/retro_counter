@@ -13,6 +13,7 @@ defmodule RetroCounter.Counter do
     GenServer.call(server, :increment)
   end
 
+  @impl true
   def init(opts) do
     state = %__MODULE__{
       count_path: Keyword.fetch!(opts, :count_path),
@@ -27,6 +28,7 @@ defmodule RetroCounter.Counter do
     {:ok, %{state | count: initial_count}}
   end
 
+  @impl true
   def handle_call(:increment, _from, state) do
     new_count = state.count + 1
 
@@ -38,6 +40,7 @@ defmodule RetroCounter.Counter do
     {:reply, new_count, new_state}
   end
 
+  @impl true
   def handle_info(:write, state) do
     write_state(state)
     state.write_callback.()
