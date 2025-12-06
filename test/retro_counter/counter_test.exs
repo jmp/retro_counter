@@ -1,14 +1,11 @@
 defmodule RetroCounter.CounterTest do
   use ExUnit.Case, async: true
 
-  setup do
-    filename = "retro_counter_test_#{System.unique_integer([:positive, :monotonic])}"
-    path = Path.join(System.tmp_dir!(), filename)
+  @moduletag :tmp_dir
 
-    on_exit(fn -> File.rm(path) end)
-
+  setup %{tmp_dir: tmp_dir} do
+    path = Path.join(tmp_dir, "count")
     File.touch!(path)
-
     {:ok, path: path}
   end
 
