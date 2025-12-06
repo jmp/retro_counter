@@ -10,18 +10,7 @@ defmodule RetroCounter.CounterTest do
   end
 
   test "writes count to disk immediately with zero delay", %{path: path} do
-    test_pid = self()
-
-    counter_pid =
-      start_supervised!(
-        {RetroCounter.Counter,
-         [
-           count_path: path,
-           write_delay: 0,
-           write_callback: fn -> send(test_pid, :write) end,
-           name: nil
-         ]}
-      )
+    counter_pid = start_counter(path, write_delay: 0)
 
     count = GenServer.call(counter_pid, :increment)
 
@@ -30,23 +19,24 @@ defmodule RetroCounter.CounterTest do
   end
 
   test "defers writing count to disk with nonzero delay", %{path: path} do
-    test_pid = self()
-
-    counter_pid =
-      start_supervised!(
-        {RetroCounter.Counter,
-         [
-           count_path: path,
-           write_delay: :timer.seconds(30),
-           write_callback: fn -> send(test_pid, :write) end,
-           name: nil
-         ]}
-      )
+    counter_pid = start_counter(path, write_delay: :timer.seconds(30))
 
     GenServer.call(counter_pid, :increment)
 
     refute_receive :write
     assert File.read!(path) == ""
+  end
+
+  defp start_counter(path, overrides) do
+    test_id = self()
+
+    defaults = [
+      count_path: path,
+      write_callback: fn -> send(test_id, :write) end,
+      name: nil
+    ]
+
+    start_supervised!({RetroCounter.Counter, Keyword.merge(defaults, overrides)})
   end
 
   defp read_current_count(path) do
