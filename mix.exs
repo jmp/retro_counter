@@ -20,7 +20,7 @@ defmodule RetroCounter.MixProject do
 
   defp deps do
     [
-      {:bandit, "~> 1.8"}
+      {:bandit, "~> 1.9"}
     ]
   end
 end
